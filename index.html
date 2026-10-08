@@ -846,11 +846,11 @@
     if(nagInterval) return;
     nagInterval = setInterval(()=>{
       const elapsed = Date.now() - firstEvadeTime;
-      if(elapsed >= 60000){
+      if(elapsed >= 26000){
         showNag(nagMessages[Math.min(nagIndex, nagMessages.length-1)]);
         nagIndex++;
       }
-    }, 15000);
+    }, 11000);
   }
 
   function showNag(text){
