@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Will You Accept?</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,500&family=Playfair+Display:wght@600;700&family=Lato:wght@300;400;600&display=swap" rel="stylesheet">
@@ -16,18 +16,16 @@
     --gold: #d9a441;
     --cream: #fff8f3;
   }
-
   *{ margin:0; padding:0; box-sizing:border-box; }
-
   html, body{
     height:100%;
     overflow:hidden;
     background: var(--wine-deep);
     font-family: 'Lato', sans-serif;
+    touch-action: none;
   }
-
   .screen{
-    position:fixed;
+    position:absolute;
     inset:0;
     display:flex;
     align-items:center;
@@ -42,10 +40,8 @@
     opacity:1;
     pointer-events:auto;
   }
-
-  /* ---------- ambient floating hearts (behind everything) ---------- */
   #hearts-bg{
-    position:fixed;
+    position:absolute;
     inset:0;
     overflow:hidden;
     pointer-events:none;
@@ -80,10 +76,8 @@
     92%{ opacity:0.35; }
     100%{ transform: translateY(112vh) translateX(15px) rotate(340deg); opacity:0; }
   }
-
-  /* ---------- warm candlelight vignette ---------- */
   #candle-glow{
-    position:fixed;
+    position:absolute;
     inset:0;
     pointer-events:none;
     z-index:0;
@@ -97,8 +91,6 @@
     45%{ opacity: 1; }
     60%{ opacity: 0.85; }
   }
-
-  /* ---------- gentle text entrance ---------- */
   .fade-rise{
     opacity:0;
     transform: translateY(14px);
@@ -108,18 +100,13 @@
     opacity:1;
     transform: translateY(0);
   }
-  .flourish{
-    color: var(--gold);
-    font-size:15px;
-    opacity:0.55;
-    margin: 10px 0 22px;
-    letter-spacing:0.3em;
-  }
-
-  /* ---------- SCREEN 1: Landing ---------- */
   #landing{
     background: radial-gradient(ellipse at center, #3a141d 0%, var(--wine-deep) 75%);
     z-index:1;
+    transition: background 0.8s ease;
+  }
+  #landing.lamp-on{
+    background: radial-gradient(ellipse at center, #632838 0%, #31111a 60%, var(--wine-deep) 90%);
   }
   #landing .eyebrow{
     font-family:'Cormorant Garamond', serif;
@@ -128,7 +115,7 @@
     color: var(--rose-soft);
     letter-spacing:0.15em;
     font-size:15px;
-    margin-bottom:18px;
+    margin-bottom:14px;
     text-transform:uppercase;
   }
   #landing h1{
@@ -137,34 +124,116 @@
     font-size:20px;
     font-weight:400;
     max-width:280px;
-    margin:0 auto 40px;
+    margin:0 auto 28px;
     line-height:1.5;
     opacity:0.75;
   }
-  #enter-btn{
-    font-family:'Playfair Display', serif;
-    font-size:19px;
-    letter-spacing:0.05em;
-    background:transparent;
-    color: var(--gold);
-    border:1px solid var(--gold);
-    padding:16px 46px;
-    border-radius:2px;
-    cursor:pointer;
-    position:relative;
-    animation: pulseGlow 2.4s ease-in-out infinite;
-    transition: background 0.35s ease, color 0.35s ease;
+  .lamp-wrapper {
+    position: relative;
+    width: 180px;
+    height: 225px;
+    margin: 0 auto 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
   }
-  #enter-btn:hover{
-    background: var(--gold);
-    color: var(--wine-deep);
+  .lamp-glow-effect {
+    position: absolute;
+    top: 10px;
+    width: 260px;
+    height: 260px;
+    background: radial-gradient(circle, rgba(255,220,130,0.65) 0%, rgba(217,164,65,0.25) 45%, rgba(217,164,65,0.05) 75%, transparent 100%);
+    border-radius: 50%;
+    opacity: 0;
+    transform: scale(0.6);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    pointer-events: none;
+    z-index: 1;
+    filter: blur(8px);
   }
-  @keyframes pulseGlow{
-    0%, 100%{ box-shadow: 0 0 0px rgba(217,164,65,0.0); }
-    50%{ box-shadow: 0 0 22px rgba(217,164,65,0.35); }
+  #landing.lamp-on .lamp-glow-effect {
+    opacity: 1;
+    transform: scale(1.3);
   }
-
-  /* ---------- SCREEN 2: Proposal ---------- */
+  .mushroom-cap {
+    position: relative;
+    width: 160px;
+    height: 65px;
+    background: linear-gradient(135deg, #462531, #2c131b);
+    border-radius: 80px 80px 18px 18px / 60px 60px 18px 18px;
+    z-index: 3;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.5);
+    transition: background 0.6s ease, box-shadow 0.6s ease;
+  }
+  #landing.lamp-on .mushroom-cap {
+    background: linear-gradient(135deg, #8a4a5e, #59303e);
+    box-shadow: 0 0 50px rgba(255,220,130,0.8), 0 6px 16px rgba(0,0,0,0.5);
+  }
+  .mushroom-cap::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 10px;
+    right: 10px;
+    height: 8px;
+    background: rgba(217,164,65,0.3);
+    border-radius: 50%;
+    filter: blur(4px);
+    transition: background 0.6s ease;
+  }
+  #landing.lamp-on .mushroom-cap::after {
+    background: rgba(255,230,160,0.95);
+    box-shadow: 0 0 20px rgba(255,220,130,0.9);
+  }
+  .mushroom-stem {
+    position: relative;
+    width: 12px;
+    height: 108px;
+    background: linear-gradient(90deg, #b88630, var(--gold), #b88630);
+    z-index: 2;
+    margin-top: -6px;
+    border-radius: 2px;
+    box-shadow: inset 0 0 4px rgba(0,0,0,0.3);
+  }
+  .mushroom-base {
+    position: relative;
+    width: 84px;
+    height: 14px;
+    background: linear-gradient(135deg, var(--gold), #9e7122);
+    border-radius: 7px;
+    z-index: 2;
+    margin-top: -2px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  }
+  .pull-chain-svg-container {
+    position: absolute;
+    top: 38px;
+    right: 42px;
+    width: 30px;
+    height: 120px;
+    z-index: 1;
+    cursor: grab;
+    touch-action: none;
+  }
+  .pull-chain-svg-container:active {
+    cursor: grabbing;
+  }
+  .pull-hint {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: rgba(255,255,255,0.45);
+    font-size: 13px;
+    margin-top: 12px;
+    letter-spacing: 0.05em;
+    animation: bounceHint 2s ease-in-out infinite;
+  }
+  @keyframes bounceHint {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(4px); }
+  }
   #proposal{
     background: radial-gradient(ellipse at top, #4a1622 0%, var(--wine-deep) 70%);
     z-index:1;
@@ -205,7 +274,6 @@
     line-height:1.3;
     margin: 6px auto 44px;
   }
-
   .btn-row{
     position:relative;
     display:flex;
@@ -215,7 +283,6 @@
     min-height:80px;
     width:100%;
   }
-
   #yes-btn{
     font-family:'Playfair Display', serif;
     font-size:19px;
@@ -228,12 +295,14 @@
     box-shadow: 0 8px 24px rgba(216,17,89,0.4);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
     letter-spacing:0.03em;
+    transform: scale(1.06);
   }
   #yes-btn:hover{
-    transform: scale(1.06);
     box-shadow: 0 10px 30px rgba(216,17,89,0.55);
   }
-
+  #yes-btn:active{
+    transform: scale(0.98);
+  }
   #no-btn{
     font-family:'Playfair Display', serif;
     font-size:16px;
@@ -243,10 +312,12 @@
     padding:14px 32px;
     border-radius:40px;
     cursor:pointer;
-    position:fixed;
-    transition: top 0.28s ease, left 0.28s ease, opacity 0.3s ease;
+    position:static;
+    transition: all 0.28s ease;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
   }
-
   #dodge-hint{
     font-family:'Cormorant Garamond', serif;
     font-style:italic;
@@ -256,10 +327,8 @@
     height:20px;
     transition: opacity 0.4s ease;
   }
-
-  /* nag notification */
   #nag-toast{
-    position:fixed;
+    position:absolute;
     bottom:36px;
     left:50%;
     transform: translateX(-50%) translateY(30px);
@@ -282,8 +351,6 @@
     opacity:1;
     transform: translateX(-50%) translateY(0);
   }
-
-  /* ---------- SCREEN 3: Celebration ---------- */
   #celebration{
     background: radial-gradient(ellipse at center, #521a2b 0%, var(--wine-deep) 75%);
     z-index:1;
@@ -323,12 +390,11 @@
     letter-spacing:0.1em;
     text-transform:uppercase;
   }
-
   #promise-btn{
     font-family:'Playfair Display', serif;
     font-size:15px;
-    background: transparent;
-    color: var(--gold);
+    background: var(--gold);
+    color: var(--wine-deep);
     border:1px solid var(--gold);
     padding:12px 28px;
     border-radius:30px;
@@ -337,35 +403,9 @@
     letter-spacing:0.03em;
     transition: background 0.3s ease, color 0.3s ease;
   }
-  #promise-btn:hover{
-    background: var(--gold);
-    color: var(--wine-deep);
+  #promise-btn:active{
+    transform: scale(0.96);
   }
-  #maps-btn{
-    display:inline-block;
-    font-family:'Playfair Display', serif;
-    font-size:14px;
-    background: var(--rose);
-    color: var(--cream);
-    border:none;
-    text-decoration:none;
-    padding:11px 26px;
-    border-radius:30px;
-    letter-spacing:0.02em;
-    box-shadow: 0 6px 18px rgba(216,17,89,0.35);
-    transition: transform 0.25s ease;
-  }
-  #maps-btn:hover{
-    transform: scale(1.05);
-  }
-  .good-luck{
-    margin-top:16px !important;
-    font-size:14px !important;
-    color: var(--gold) !important;
-    letter-spacing:0.08em;
-    text-transform:uppercase;
-  }
-
   #ended{
     background: radial-gradient(ellipse at center, #3a141d 0%, var(--wine-deep) 75%);
     z-index:1;
@@ -388,20 +428,17 @@
   #restart-btn{
     font-family:'Playfair Display', serif;
     font-size:15px;
-    background: transparent;
-    color: rgba(255,255,255,0.6);
+    background: rgba(255,255,255,0.1);
+    color: var(--cream);
     border:1px solid rgba(255,255,255,0.3);
     padding:12px 30px;
     border-radius:30px;
     cursor:pointer;
     transition: background 0.3s ease, color 0.3s ease;
   }
-  #restart-btn:hover{
-    background: rgba(255,255,255,0.1);
-    color: var(--cream);
+  #restart-btn:active{
+    transform: scale(0.96);
   }
-
-  /* ---------- SCREEN 5: heart animation ---------- */
   #onemore{
     background: #000;
     z-index:2;
@@ -516,10 +553,11 @@
     border-radius: 30px;
     letter-spacing: 0.02em;
     box-shadow: 0 0 20px rgba(234,128,176,0.55);
+    transform: scale(1.06);
     transition: transform 0.25s ease;
   }
-  #onemore-maps-btn:hover{
-    transform: scale(1.06);
+  #onemore-maps-btn:active{
+    transform: scale(1);
   }
   #onemore-goodluck{
     margin-top: 22px;
@@ -529,39 +567,43 @@
     letter-spacing: 0.15em;
     text-transform: uppercase;
   }
-
   #confetti-canvas{
-    position:fixed;
+    position:absolute;
     inset:0;
     pointer-events:none;
     z-index:5;
   }
-
-  @media (prefers-reduced-motion: reduce){
-    .heart-particle, #enter-btn, .seal{ animation:none !important; }
-    #no-btn{ transition:none !important; }
-  }
-
   @media (max-width:480px){
     .btn-row{ gap:18px; flex-direction:column; }
-    #no-btn{ position:relative; }
+    #yes-btn{ padding:14px 32px; font-size:18px; }
+    #no-btn{ padding:12px 26px; font-size:15px; }
   }
 </style>
 </head>
 <body>
-
 <div id="hearts-bg"></div>
 <div id="candle-glow"></div>
 
-<!-- SCREEN 1 -->
 <div class="screen active" id="landing">
   <div class="eyebrow fade-rise">a small letter awaits</div>
   <h1 class="fade-rise" style="transition-delay:0.15s">Hey — wanna play a simple game?</h1>
-  <div class="flourish fade-rise" style="transition-delay:0.3s">❀ ❀ ❀</div>
-  <button id="enter-btn" class="fade-rise" style="transition-delay:0.4s">Enter</button>
+  
+  <div class="lamp-wrapper fade-rise" style="transition-delay:0.25s">
+    <div class="lamp-glow-effect"></div>
+    
+    <svg class="pull-chain-svg-container" id="pullChainSvg" viewBox="0 0 30 120">
+      <line id="cordLine" x1="15" y1="0" x2="15" y2="30" stroke="#d9a441" stroke-width="3" stroke-linecap="round"/>
+      <circle id="cordHandle" cx="15" cy="30" r="7" fill="#d9a441" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.4))"/>
+    </svg>
+
+    <div class="mushroom-cap"></div>
+    <div class="mushroom-stem"></div>
+    <div class="mushroom-base"></div>
+  </div>
+  
+  <div class="pull-hint fade-rise" style="transition-delay:0.35s">pull the chain down ✨</div>
 </div>
 
-<!-- SCREEN 2 -->
 <div class="screen" id="proposal">
   <div class="envelope-wrap"><div class="seal">&#10084;</div></div>
   <div class="msg-line fade-rise">from the bottom of my heart</div>
@@ -573,7 +615,6 @@
   <div id="dodge-hint">go on, pick one 👀</div>
 </div>
 
-<!-- SCREEN 3 -->
 <div class="screen" id="celebration">
   <div class="big-heart">💖</div>
   <h2 class="fade-rise" style="transition-delay:0.1s">Hurray!</h2>
@@ -583,7 +624,6 @@
   <div class="sign fade-rise" style="transition-delay:0.75s">— with all my love</div>
 </div>
 
-<!-- SCREEN 4: reached only if No is somehow clicked -->
 <div class="screen" id="ended">
   <div class="big-heart">💔</div>
   <h2 id="ended-heading">Oh no...</h2>
@@ -591,14 +631,13 @@
   <button id="restart-btn">Give it another try</button>
 </div>
 
-<!-- SCREEN 5: heart animation, shown after "One more thing" -->
 <div class="screen" id="onemore">
   <div id="ui"></div>
   <div id="onemore-overlay">
     <div id="onemore-panel">
       <p>Now that it's official — let's actually go somewhere.<br>Shall we?</p>
       <a id="onemore-maps-btn" href="https://www.google.com/maps/search/romantic+date+spots+near+me" target="_blank" rel="noopener">Find a spot near me 📍</a>
-      <div id="onemore-goodluck">Good luck 🍀</div>
+      <div id="onemore-goodluck">🍀With My Love🍀</div>
     </div>
   </div>
 </div>
@@ -608,7 +647,6 @@
 
 <script>
 (function(){
-  // ---------- ambient floating hearts ----------
   const heartsBg = document.getElementById('hearts-bg');
   const heartSymbols = ['❤','♥','💗'];
   for(let i=0;i<18;i++){
@@ -622,7 +660,6 @@
     heartsBg.appendChild(h);
   }
 
-  // ---------- gently drifting rose petals ----------
   const petalSymbols = ['❁','✿','❀'];
   for(let i=0;i<12;i++){
     const p = document.createElement('div');
@@ -635,18 +672,85 @@
     heartsBg.appendChild(p);
   }
 
-  // ---------- screen switching ----------
   const landing = document.getElementById('landing');
   const proposal = document.getElementById('proposal');
-  const celebration = document.getElementById('celebration');
+  const pullChainSvg = document.getElementById('pullChainSvg');
+  const cordLine = document.getElementById('cordLine');
+  const cordHandle = document.getElementById('cordHandle');
 
-  document.getElementById('enter-btn').addEventListener('click', ()=>{
-    landing.classList.remove('active');
-    proposal.classList.add('active');
-    startDodgeLogic();
+  let isDragging = false;
+  let activePointerId = null;
+  let startY = 0;
+  let currentY = 0;
+  const restingY = 30;
+  const threshold = 40; 
+  let activated = false;
+
+  pullChainSvg.addEventListener('pointerdown', (e) => {
+    if (activated) return;
+    isDragging = true;
+    activePointerId = e.pointerId;
+    startY = e.clientY;
+    try {
+      pullChainSvg.setPointerCapture(e.pointerId);
+    } catch(err) {}
+    e.preventDefault();
   });
 
-  // ---------- dodging NO button ----------
+  pullChainSvg.addEventListener('pointermove', (e) => {
+    if (!isDragging || activated) return;
+    currentY = e.clientY - startY;
+    if (currentY < 0) currentY = 0;
+    if (currentY > 70) currentY = 70 + (currentY - 70) * 0.25;
+
+    let newY = restingY + currentY;
+    cordLine.setAttribute('y2', newY);
+    cordHandle.setAttribute('cy', newY);
+  });
+
+  function releaseCord(e) {
+    if (!isDragging || activated) return;
+    isDragging = false;
+    if (activePointerId !== null) {
+      try {
+        pullChainSvg.releasePointerCapture(activePointerId);
+      } catch(err) {}
+      activePointerId = null;
+    }
+
+    if (currentY >= threshold) {
+      activated = true;
+      cordLine.style.transition = 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+      cordHandle.style.transition = 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+      cordLine.setAttribute('y2', restingY);
+      cordHandle.setAttribute('cy', restingY);
+
+      landing.classList.add('lamp-on');
+      setTimeout(() => {
+        landing.classList.remove('active');
+        proposal.classList.add('active');
+        startDodgeLogic();
+      }, 1200);
+    } else {
+      cordLine.style.transition = 'all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+      cordHandle.style.transition = 'all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+      cordLine.setAttribute('y2', restingY);
+      cordHandle.setAttribute('cy', restingY);
+      currentY = 0;
+
+      setTimeout(() => {
+        cordLine.style.transition = '';
+        cordHandle.style.transition = '';
+      }, 500);
+    }
+  }
+
+  pullChainSvg.addEventListener('pointerup', releaseCord);
+  pullChainSvg.addEventListener('pointercancel', releaseCord);
+  pullChainSvg.addEventListener('pointerleave', (e) => {
+    if (isDragging) releaseCord(e);
+  });
+
   const noBtn = document.getElementById('no-btn');
   const yesBtn = document.getElementById('yes-btn');
   const dodgeHint = document.getElementById('dodge-hint');
@@ -654,7 +758,6 @@
 
   let dodging = false;
   let firstEvadeTime = null;
-  let nagShown = false;
   let nagMessages = [
     "Give up girl, why don't you say yes 😅",
     "That button has left the chat. Yes is right there though 👉",
@@ -672,12 +775,6 @@
     const y = margin + Math.random()*(h - btnH - margin*2);
     return {x, y};
   }
-
-  function placeNoButtonInitial(){
-    // put it just under the yes button initially, using static flow, then switch to fixed on first dodge
-    noBtn.style.position = 'static';
-  }
-  placeNoButtonInitial();
 
   function activateFixedMode(){
     if(noBtn.style.position === 'fixed') return;
@@ -715,27 +812,30 @@
   }
 
   function startDodgeLogic(){
-    document.addEventListener('mousemove', (e)=>{
+    document.addEventListener('pointermove', (e)=>{
       proximityCheck(e.clientX, e.clientY);
     });
-    document.addEventListener('touchmove', (e)=>{
-      const t = e.touches[0];
-      if(t) proximityCheck(t.clientX, t.clientY);
-    }, {passive:true});
-    // catches a finger landing near (but not exactly on) the button on first contact
+    
     document.addEventListener('touchstart', (e)=>{
       const t = e.touches[0];
       if(t) proximityCheck(t.clientX, t.clientY);
-    }, {passive:true});
+    }, {passive:false});
+    
+    document.addEventListener('touchmove', (e)=>{
+      const t = e.touches[0];
+      if(t) proximityCheck(t.clientX, t.clientY);
+    }, {passive:false});
 
-    // catches a finger landing directly ON the button on first contact -
-    // must fire before the browser's synthesized click, so evade + cancel it here
     noBtn.addEventListener('touchstart', (e)=>{
       e.preventDefault();
       evade();
     }, {passive:false});
 
-    // if she somehow actually manages to click No (e.g. mouse/trackpad), the story ends
+    noBtn.addEventListener('pointerdown', (e)=>{
+      e.preventDefault();
+      evade();
+    });
+
     noBtn.addEventListener('click', (e)=>{
       e.preventDefault();
       endFlow();
@@ -746,7 +846,7 @@
     if(nagInterval) return;
     nagInterval = setInterval(()=>{
       const elapsed = Date.now() - firstEvadeTime;
-      if(elapsed >= 60000){ // 1 minute
+      if(elapsed >= 60000){
         showNag(nagMessages[Math.min(nagIndex, nagMessages.length-1)]);
         nagIndex++;
       }
@@ -761,7 +861,7 @@
     }, 4200);
   }
 
-  // ---------- YES ----------
+  const celebration = document.getElementById('celebration');
   yesBtn.addEventListener('click', ()=>{
     proposal.classList.remove('active');
     celebration.classList.add('active');
@@ -769,7 +869,6 @@
     launchConfetti();
   });
 
-  // ---------- NO (ends the story) ----------
   const ended = document.getElementById('ended');
   function endFlow(){
     proposal.classList.remove('active');
@@ -780,20 +879,26 @@
   document.getElementById('restart-btn').addEventListener('click', ()=>{
     ended.classList.remove('active');
     landing.classList.add('active');
-    // reset No button back to normal flow position
+    landing.classList.remove('lamp-on');
+    activated = false;
+    currentY = 0;
+    cordLine.setAttribute('y2', restingY);
+    cordHandle.setAttribute('cy', restingY);
     noBtn.style.position = 'static';
+    noBtn.style.left = '';
+    noBtn.style.top = '';
     dodging = false;
     firstEvadeTime = null;
     nagIndex = 0;
     dodgeHint.style.opacity = '1';
+    if(nagInterval) clearInterval(nagInterval);
+    nagInterval = null;
   });
 
-  // ---------- "one more thing" heart animation screen ----------
   const onemoreScreen = document.getElementById('onemore');
   const promiseBtn = document.getElementById('promise-btn');
   const onemoreUi = document.getElementById('ui');
 
-  // build the 100 floating "I love you" hearts once
   const totalHearts = 100;
   for (let i = 1; i <= totalHearts; i++) {
     const love = document.createElement('div');
@@ -814,7 +919,6 @@
     onemoreScreen.classList.add('active');
   });
 
-  // ---------- confetti ----------
   const canvas = document.getElementById('confetti-canvas');
   const ctx = canvas.getContext('2d');
   function resizeCanvas(){
@@ -877,6 +981,5 @@
   }
 })();
 </script>
-
 </body>
 </html>
