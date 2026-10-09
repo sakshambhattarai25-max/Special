@@ -849,7 +849,7 @@
     if(nagInterval) return;
     nagInterval = setInterval(()=>{
       const elapsed = Date.now() - firstEvadeTime;
-      if(elapsed >= 19000){
+      if(elapsed >= 11000){
         showNag(nagMessages[Math.min(nagIndex, nagMessages.length-1)]);
         nagIndex++;
       }
