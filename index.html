@@ -190,7 +190,7 @@
   }
   .mushroom-stem {
     position: relative;
-    width: 12px;
+    width: 13px;
     height: 108px;
     background: linear-gradient(90deg, #b88630, var(--gold), #b88630);
     z-index: 2;
@@ -210,11 +210,11 @@
   }
   .pull-chain-svg-container {
     position: absolute;
-    top: 38px;
+    top: 45px;
     right: 42px;
     width: 30px;
-    height: 120px;
-    z-index: 1;
+    height: 130px;
+    z-index: 3;
     cursor: grab;
     touch-action: none;
   }
@@ -585,15 +585,18 @@
 <div id="candle-glow"></div>
 
 <div class="screen active" id="landing">
-  <div class="eyebrow fade-rise">a hidden suprise</div>
+  <div class="eyebrow fade-rise">a hidden suprise </div>
   <h1 class="fade-rise" style="transition-delay:0.15s">Hey — wanna play a simple game?</h1>
   
   <div class="lamp-wrapper fade-rise" style="transition-delay:0.25s">
     <div class="lamp-glow-effect"></div>
     
-    <svg class="pull-chain-svg-container" id="pullChainSvg" viewBox="0 0 30 120">
-      <line id="cordLine" x1="15" y1="0" x2="15" y2="30" stroke="#d9a441" stroke-width="3" stroke-linecap="round"/>
-      <circle id="cordHandle" cx="15" cy="30" r="7" fill="#d9a441" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.4))"/>
+    <svg class="pull-chain-svg-container" id="pullChainSvg" viewBox="0 0 30 150">
+      <line id="cordLine" x1="15" y1="0" x2="15" y2="55"
+            stroke="#d9a441" stroke-width="4" stroke-linecap="round"/>
+    
+      <circle id="cordHandle" cx="15" cy="50" r="9"
+              fill="#d9a441"/>
     </svg>
 
     <div class="mushroom-cap"></div>
@@ -846,7 +849,7 @@
     if(nagInterval) return;
     nagInterval = setInterval(()=>{
       const elapsed = Date.now() - firstEvadeTime;
-      if(elapsed >= 26000){
+      if(elapsed >= 19000){
         showNag(nagMessages[Math.min(nagIndex, nagMessages.length-1)]);
         nagIndex++;
       }
